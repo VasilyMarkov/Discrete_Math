@@ -1,0 +1,6 @@
+name = "propositional_logic"
+defaultTargets = ["propositional_logic"]
+
+[[lean_lib]]
+name = "propositional_logic"
+globs = ["propositional_logic.+"]

@@ -1,0 +1,54 @@
+{
+  "name": "Lean 4 + Mathlib",
+
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": "..",
+    "target": "lean-base",
+    "options": ["--add-host=release.lean-lang.org:172.66.46.239"],
+    "args": { "LEAN_TOOLCHAIN": "leanprover/lean4:stable", "USER": "lean", "UID": "1000" }
+  },
+
+  "remoteUser": "lean",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+
+  "mounts": [
+    "source=lean-elan,target=/home/lean/.elan,type=volume",
+    "source=lean-mathlib-cache,target=/home/lean/.cache/mathlib,type=volume",
+    "source=lean-bash-history,target=/home/lean/.bash_history_dir,type=volume"
+  ],
+
+  "containerEnv": {
+    "HISTFILE": "/home/lean/.bash_history_dir/.bash_history",
+    "HISTSIZE": "10000",
+    "HISTCONTROL": "ignoredups"
+  },
+
+  "postCreateCommand": "bash -c 'if [ -f lake-manifest.json ]; then lake exe cache get; else echo \"No Lean project yet. Run: lake init discrete math\"; fi'",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "leanprover.lean4",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": false,
+        "git.autofetch": true,
+        "files.watcherExclude": {
+          "**/.lake/**": true
+        },
+        "search.exclude": {
+          "**/.lake/**": true
+        },
+        "lean4.serverEnv": {
+          "LEAN_NUM_THREADS": "4"
+        }
+      }
+    }
+  },
+
+  "runArgs": ["--memory=8g", "--add-host=release.lean-lang.org:172.66.46.239"],
+}
