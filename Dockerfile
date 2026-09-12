@@ -28,7 +28,15 @@ RUN apt-get update \
       bash-completion \
       unzip \
       libgmp-dev \
+      tzdata \
  && rm -rf /var/lib/apt/lists/*
+
+# tzdata above pulls in /usr/share/zoneinfo but ubuntu:24.04 doesn't seed
+# /etc/localtime from it. Without that file present, the Lean 4 language
+# server's watchdog process fails on startup ("Watchdog error: no such
+# file or directory, file: /etc/localtime") and the VS Code extension
+# gets stuck on "Waiting for Lean server to start...".
+RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 
 # ubuntu:24.04 ships a built-in `ubuntu` user occupying UID 1000, which makes
 # a plain `useradd --uid 1000` fail with "UID is not unique". Drop whoever

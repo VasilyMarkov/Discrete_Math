@@ -1,6 +1,10 @@
 name = "propositional_logic"
-defaultTargets = ["propositional_logic"]
+defaultTargets = ["propositional_logic", "type_theory"]
 
 [[lean_lib]]
 name = "propositional_logic"
 globs = ["propositional_logic.+"]
+
+[[lean_lib]]
+name = "type_theory"
+globs = ["type_theory.+"]
