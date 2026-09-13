@@ -3,10 +3,10 @@ variable (p q r s : Prop)
 -- Modus ponens
 theorem modus_ponens (h : p → q) (hp : p) : q := h hp
 -- Hypothetical syllogism
-theorem hs (h : p → q) (n : q → r) : p → r :=
-  fun hp => n (h hp)
+theorem hs (hpq : p → q) (hqr : q → r) : p → r :=
+  fun hp => hqr (hpq hp)
 -- Modus tollens
-theorem modus_tollens (h : p → q) (hnq: ¬q) : ¬p :=
+theorem modus_tollens (h : p → q) (hnq: q → False) : p → False :=
   fun hp => hnq (h hp)
 -- Addition
 theorem addition (hp : p) : p ∨ q := Or.inl hp
